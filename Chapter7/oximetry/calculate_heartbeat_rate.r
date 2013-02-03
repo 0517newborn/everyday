@@ -3,15 +3,12 @@ library(ggplot2)
 
 data <- read.csv(file='data.csv', header=T)
 
-png("heartbeat_rate.png")
+png("heartbeat.png")
 qplot(data=data, frame, intensity, geom="line")
+dev.off()
 
-
-# find the peak intensities
 peaks <- peaks(data$intensity,span=10)
 peak_times <- which(peaks==T, arr.in=T)
-
-# find the intervals between the peaks
 intervals <- c()
 i <- 1
 while (i < length(peak_times)) {
@@ -19,12 +16,7 @@ while (i < length(peak_times)) {
   i <- i + 1
 }
 
-# find the mode interval
-mode <- as.numeric(names(sort(table(intervals), decreasing=T)[1]))
-print(paste("Mode interval between peak intensities is", mode))
-
-# movie frame rate is 30 fps
-heartbeat_rate <- round(60 * (30/mode))
+average <- round(mean(intervals))
+print(paste("Average interval between peak intensities is", average))
+heartbeat_rate <- round(60 * (30/average))
 print(paste("Heartbeat rate is",heartbeat_rate))
-
-dev.off()
