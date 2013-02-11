@@ -1,44 +1,28 @@
-library(ggplot2)
-heartbeat <- c()
-period = seq(from=25, to=200, by=25)
-rates <- c()
+data <- read.csv(file='heartbeat.csv', header=TRUE)
+filtered_data <- data[data$ch1 > 95 & data$ch1 < 105,]
+cycle <- as.numeric(rownames(filtered_data))
 
-
-for (p in period) {
-  data <- read.csv(file='heartbeat.csv', header=TRUE)
-  filtered_data <- data[data$ch1 > p,]
-  sounds <- as.numeric(rownames(filtered_data))
-  
-  beats <- unique(round(sounds/1000))
-  cycles_between_beats <- c()
-  count <- 1
-  while (count < length(beats)) {
-    cycles_between_beats <- append(cycles_between_beats, beats[count+1] - beats[count])
-    count <- count + 1
-  }
-
-  cycles_between_beats <- cycles_between_beats[!cycles_between_beats<5]
-  cy <- data.frame(cycles=cycles_between_beats,time=1:length(cycles_between_beats))
-  png(paste("heartbeat_cycles_",p,".png",sep=""))
-  print(qplot(time,cycles,data=cy))
-  dev.off()
-  rate <- c()
-  count <- 1
-  while (count < length(cycles_between_beats)) {
-    rate <- append(rate, cycles_between_beats[count] + cycles_between_beats[count+1])
-    count <- count + 2
-  }
-  rates <- append(rates, (round(mean(rate))))
-
+beats <- unique(round(cycle/1000))
+intervals <- c()
+count <- 1
+while (count < length(beats)) {
+  intervals <- append(intervals, beats[count+1] - beats[count])
+  count <- count + 1
 }
 
+intervals <- intervals[!intervals<5]
 
-png("heartbeat_rate.png")
-f <- data.frame(table(rates))
-print(qplot(rates,Freq,data=f,geom="bar"))
-dev.off()
+steps = seq(from=1, to=length(intervals), by=2)
+frequency <- c()
+count <- 1
+for (step in steps) {
+  frequency <- append(frequency, intervals[step] + intervals[step+1])
+  count <- count + 1
+}
 
-r <- as.numeric(names(sort(table(rates),decreasing=T)[1]))
-print(paste("Interval between successive S1 + S2 sounds is", r*1000, "cycles"))
-heartbeat <- round(60/(r/44.1))
-print(paste("Heart rate is ", heartbeat, "bpm"))
+average_frequency <- mean(frequency, na.rm=T)
+heart_rate <- round(60/(average_frequency/44.1))
+
+print(paste("Interval between successive S1 + S2 sounds is", 
+    round(average_frequency*1000), "cycles"))
+print(paste("Heart rate is ", heart_rate, "bpm"))

@@ -1,16 +1,18 @@
-require 'stringio'
 require 'csv'
 
 CSV.open('heartbeat.csv', 'w') do |csv|
- csv << %w(ch1 ch2 combined)
+  csv << %w(time ch1 ch2 combined)
   File.open('heartbeat.wav') do |file|
-    while !file.eof?
+    file.seek(8)
+    if file.read(4) == "WAVE"
+      file.seek(36)
       if file.read(4) == 'data'
-        length = file.read(4).unpack('l').first
-        wavedata = StringIO.new file.read(length)
-        while !wavedata.eof? 
-          ch1, ch2 = wavedata.read(4).unpack('ss')
-          csv << [ch1, ch2,ch1.to_i+ch2.to_i]
+        file.seek(4, IO::SEEK_CUR)
+        n = 1
+        while !file.eof?
+          ch1, ch2 = file.read(4).unpack('ss')
+          csv << [n, ch1, ch2, ch1.to_i+ch2.to_i]
+          n += 1
         end
       end
     end
