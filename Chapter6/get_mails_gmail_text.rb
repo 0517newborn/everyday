@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 require 'csv'
 require 'mail'
 require 'nokogiri'
@@ -24,8 +26,8 @@ end
 
 EMAILS_TO_RETRIEVE = 2000
 
-USER = ''
-PASS = ''
+USER = '<YOUR USERNAME>'
+PASS = '<YOUR PASSWORD>'
 Mail.defaults do
   retriever_method :imap, :address => "imap.gmail.com",
                           :port       => 993,
@@ -34,7 +36,7 @@ Mail.defaults do
                           :enable_ssl => true
 end
 
-{:inbox => 'INBOX', :sent => '[Gmail]/Sent Mail'}.each do |name, mailbox|
+{:inbox => 'INBOX', :sent => '[Gmail]/送信済みメール'}.each do |name, mailbox|
   emails = Mail.find(:mailbox => mailbox, 
                      :what => :last, 
                      :count => EMAILS_TO_RETRIEVE, 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 require 'csv'
 require 'mail'
 
@@ -10,8 +12,8 @@ def write_row(mail, csv)
 end
 
 EMAILS_TO_RETRIEVE = 2000
-USER = ''
-PASS = ''
+USER = '<YOUR USERNAME>'
+PASS = '<YOUR PASSWORD>'
 
 Mail.defaults do
   retriever_method :imap, :address => "imap.gmail.com",
@@ -21,8 +23,8 @@ Mail.defaults do
                           :enable_ssl => true
 end
 
-{:inbox => 'INBOX', :sent => '[Gmail]/Sent Mail'}.each do |name, mailbox|
-  emails = Mail.find(:mailbox => mailbox, 
+{:inbox => 'INBOX', :sent => '[Gmail]/送信済みメール'}.each do |name, mailbox|
+  emails = Mail.find(:mailbox => mailbox,
                      :what => :last, 
                      :count => EMAILS_TO_RETRIEVE, 
                      :order => :dsc)
@@ -30,7 +32,7 @@ end
   CSV.open("#{name}_data_gmail.csv", 'w') do |csv|
     csv << %w(from to date)
     emails.each do |mail|
-      begin 
+      begin
         write_row mail, csv
       rescue
         puts "Cannot write this mail -> #{mail.from} to #{mail.to} with subject: #{mail.subject}"
