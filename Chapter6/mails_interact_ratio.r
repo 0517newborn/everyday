@@ -1,9 +1,7 @@
-sink(file="ch08_ex6.txt")
+inbox_data <- read.table("inbox_data_enron.csv", header=TRUE, sep=",", quote='')
+sent_data <- read.table("sent_data_enron.csv", header=TRUE, sep=",", quote='')
 
-in_data <- read.table("inbox_data_enron.csv", header=TRUE, sep=",")
-sent_data <- read.table("sent_data_enron.csv", header=TRUE, sep=",")
-
-from <- data.frame(table(in_data['from']))
+from <- data.frame(table(inbox_data['from']))
 to <- data.frame(table(sent_data['to']))
 
 mails <- union(from$Var1, to$Var1)

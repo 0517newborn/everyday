@@ -1,6 +1,5 @@
 library(tm)
 
-sink(file="ch08_ex7.txt")
 sent_data <- read.csv("sent_txt_data_enron.csv", header=TRUE, sep=",")
 
 alldates <- format(as.Date(sent_data$date), '%Y-%m')
@@ -15,11 +14,11 @@ for (date in levels(factor(alldates))) {
   print(frequent_terms)
 }
 
-in_data <- read.csv("inbox_txt_data_enron.csv", header=TRUE, sep=",")
+inbox_data <- read.csv("inbox_txt_data_enron.csv", header=TRUE, sep=",")
 
-alldates <- format(as.Date(in_data$date), '%Y-%m')
+alldates <- format(as.Date(inbox_data$date), '%Y-%m')
 for (date in levels(factor(alldates))) {
-  data <- in_data[format(as.Date(in_data$date), "%Y-%m") == date, ]
+  data <- inbox_data[format(as.Date(inbox_data$date), "%Y-%m") == date, ]
 
   source <- VectorSource(data$body)
   corpus <- Corpus(source)

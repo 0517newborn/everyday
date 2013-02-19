@@ -1,7 +1,5 @@
-sink(file="ch08_ex5.txt")
-
-inbox_data <- read.table("inbox_data_enron.csv", header=TRUE, sep=",")
-sent_data <- read.table("sent_data_enron.csv", header=TRUE, sep=",")
+inbox_data <- read.table("inbox_data_enron.csv", header=TRUE, sep=",", quote='')
+sent_data <- read.table("sent_data_enron.csv", header=TRUE, sep=",", quote='')
 
 from <- inbox_data['from']
 colnames(from)[1] <- 'mail'
