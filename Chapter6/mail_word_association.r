@@ -1,7 +1,7 @@
 library(tm)
 library(arules)
 
-inbox_data <- read.csv("~/rubyWorkspace/everyday/Chapter6/inbox_txt_data_enron.csv", header=TRUE, sep=",")
+inbox_data <- read.csv("inbox_txt_data_enron.csv", header=TRUE, sep=",")
 
 terms_list <- as.list(NULL)
 for (i in 1:length(inbox_data$body)){
