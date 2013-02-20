@@ -4,7 +4,7 @@ sent_data <- read.table("sent_data_enron.csv", header=TRUE, sep=",", quote='')
 from <- data.frame(table(inbox_data['from']))
 to <- data.frame(table(sent_data['to']))
 
-mails <- union(from$Var1, to$Var1)
+mails <- union(as.vector(from$Var1), as.vector(to$Var1))
 df <- data.frame(email=NA,ratio=0)
 for (mail in mails) {
   to_count <- to[to$Var1 == mail,]$Freq
