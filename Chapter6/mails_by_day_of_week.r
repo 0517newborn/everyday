@@ -4,10 +4,10 @@ library(mailminer)
 inbox_data <- read.table("inbox_data_enron.csv", header=TRUE, sep=",", quote="")
 sent_data <- read.table("sent_data_enron.csv", header=TRUE, sep=",", quote="")
 
-inbox_count <- dates_count(dates=inbox_data['date'], element='%u')
-sent_count <- dates_count(dates=sent_data['date'], element='%u')
+inbox_count <- dates_count(dates=inbox_data['date'], element='%w')
+sent_count <- dates_count(dates=sent_data['date'], element='%w')
 
-days_of_week <- c("Mon","Tue","Wed","Thu","Fri","Sat","Sun")
+days_of_week <- c("Sun", "Mon","Tue","Wed","Thu","Fri","Sat")
 
 df <- data.frame(days=factor(days_of_week, levels=days_of_week),inbox=inbox_count,sent=sent_count)
 
